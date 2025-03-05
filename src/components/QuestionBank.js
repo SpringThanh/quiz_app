@@ -91,4 +91,4 @@ const qBank = [
   },
 ];
 
-export default questions;
+export default qBank;
