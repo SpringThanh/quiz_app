@@ -1,7 +1,9 @@
 import React, { Component } from "react";
+
 class Options extends Component {
   render() {
     const { options, selectedOption, onOptionChange } = this.props;
+
     return (
       <div className="options">
         {options.map((option, index) => (
@@ -21,4 +23,5 @@ class Options extends Component {
     );
   }
 }
+
 export default Options;
