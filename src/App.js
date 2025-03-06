@@ -1,76 +1,57 @@
-import React, { Component } from "react";
+// App.js
+import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import Question from "./components/Question.js";
-import qBank from "./components/QuestionBank.js";
-import Score from "./components/Score.js";
+import Question from "./components/Question";
+import qBank from "./components/QuestionBank";
+import Score from "./components/Score";
 import "./App.css";
 
-class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      questionBank: qBank,
-      currentQuestion: 0,
-      selectedOption: "",
-      score: 0,
-      quizEnd: false,
-    };
-  }
+const App = () => {
+  const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [selectedOption, setSelectedOption] = useState("");
+  const [score, setScore] = useState(0);
+  const [quizEnd, setQuizEnd] = useState(false);
 
-  handleOptionChange = (e) => {
-    this.setState({ selectedOption: e.target.value });
+  const handleOptionChange = (e) => {
+    setSelectedOption(e.target.value);
   };
 
-  handleFormSubmit = (e) => {
+  const handleFormSubmit = (e) => {
     e.preventDefault();
-    this.checkAnswer();
-    this.handleNextQuestion();
+    checkAnswer();
+    handleNextQuestion();
   };
 
-  checkAnswer = () => {
-    const { questionBank, currentQuestion, selectedOption, score } = this.state;
-    if (selectedOption === questionBank[currentQuestion].answer) {
-      this.setState((prevState) => ({ score: prevState.score + 1 }));
+  const checkAnswer = () => {
+    if (selectedOption === qBank[currentQuestion].answer) {
+      setScore(score + 1);
     }
   };
 
-  handleNextQuestion = () => {
-    const { questionBank, currentQuestion } = this.state;
-    if (currentQuestion + 1 < questionBank.length) {
-      this.setState((prevState) => ({
-        currentQuestion: prevState.currentQuestion + 1,
-        selectedOption: "",
-      }));
+  const handleNextQuestion = () => {
+    if (currentQuestion + 1 < qBank.length) {
+      setCurrentQuestion(currentQuestion + 1);
+      setSelectedOption("");
     } else {
-      this.setState({
-        quizEnd: true,
-      });
+      setQuizEnd(true);
     }
   };
 
-  render() {
-    const { questionBank, currentQuestion, selectedOption, score, quizEnd } =
-      this.state;
-    return (
-      <div className="App d-flex flex-column align-items-center justify-content-center">
-        <h1 className="app-title">QUIZ APP</h1>
-        {!quizEnd ? (
-          <Question
-            question={questionBank[currentQuestion]}
-            selectedOption={selectedOption}
-            onOptionChange={this.handleOptionChange}
-            onSubmit={this.handleFormSubmit}
-          />
-        ) : (
-          <Score
-            score={score}
-            onNextQuestion={this.handleNextQuestion}
-            className="score"
-          />
-        )}
-      </div>
-    );
-  }
-}
+  return (
+    <div className="App d-flex flex-column align-items-center justify-content-center">
+      <h1 className="app-title">QUIZ APP</h1>
+      {!quizEnd ? (
+        <Question
+          question={qBank[currentQuestion]}
+          selectedOption={selectedOption}
+          onOptionChange={handleOptionChange}
+          onSubmit={handleFormSubmit}
+        />
+      ) : (
+        <Score score={score} />
+      )}
+    </div>
+  );
+};
 
 export default App;
